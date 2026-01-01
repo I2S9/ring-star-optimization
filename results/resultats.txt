@@ -1,0 +1,2 @@
+# Fichier pour stocker les résultats des expérimentations
+# À remplir lors des tests

@@ -1,0 +1,5 @@
+# Projet : Problème de l'anneau-étoile (Ring-Star Problem)
+
+> Ce projet a pour objectif de résoudre, de manière heuristique, métaheuristique et exacte (via PLNE), le problème dit de l'anneau-étoile.
+
+> Le problème modélise le tracé d'une ligne de transport public circulaire (métro, tramway, bus), passant par un sous-ensemble de points appelés stations, et desservant l'ensemble des zones environnantes.

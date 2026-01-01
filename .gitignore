@@ -1,0 +1,4 @@
+# Fichier de règles spécifique à Cursor
+# Ce fichier contient des instructions pour l'assistant IA
+# et ne doit pas être versionné dans le dépôt distant
+.cursorrules

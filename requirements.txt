@@ -1,0 +1,6 @@
+# Dépendances Python pour le projet
+# À compléter avec les versions spécifiques
+
+numpy
+matplotlib
+pulp
