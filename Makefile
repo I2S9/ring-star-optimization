@@ -1,4 +1,98 @@
 # Makefile pour le projet d'optimisation combinatoire
 # Problème de l'anneau-étoile
+#
+# Ce Makefile facilite l'exécution du projet et garantit la reproductibilité
+# des expérimentations. Toutes les commandes sont simples et claires.
 
-# À compléter avec les règles nécessaires
+# Variable pour Python (peut être python3 selon le système)
+PYTHON = python
+
+# Variable pour le fichier d'instance par défaut
+INSTANCE = data/tsp/att48.tsp
+
+# Nombre de stations par défaut
+P = 5
+
+# Coefficient alpha par défaut
+ALPHA = 0.5
+
+# Règle par défaut : affiche l'aide
+.DEFAULT_GOAL := help
+
+# Règle help : affiche les commandes disponibles
+.PHONY: help
+help:
+	@echo "Makefile pour le projet anneau-étoile"
+	@echo ""
+	@echo "Commandes disponibles :"
+	@echo "  make install    - Installe les dépendances Python"
+	@echo "  make run         - Lance une comparaison avec l'instance par défaut"
+	@echo "  make clean       - Nettoie les fichiers générés"
+	@echo "  make test        - Lance un test rapide"
+	@echo ""
+	@echo "Variables (modifiables) :"
+	@echo "  INSTANCE=$(INSTANCE)"
+	@echo "  P=$(P)"
+	@echo "  ALPHA=$(ALPHA)"
+
+# Règle install : installe les dépendances Python
+# Utilise pip pour installer les packages listés dans requirements.txt
+.PHONY: install
+install:
+	@echo "Installation des dépendances..."
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -r requirements.txt
+	@echo "Installation terminée."
+
+# Règle run : lance le programme principal
+# Exécute les comparaisons expérimentales avec les paramètres par défaut
+# Les résultats sont sauvegardés dans results/resultats.txt
+.PHONY: run
+run:
+	@echo "Lancement des comparaisons expérimentales..."
+	@echo "Instance : $(INSTANCE)"
+	@echo "Nombre de stations : $(P)"
+	@echo "Alpha : $(ALPHA)"
+	@echo ""
+	@if [ ! -f $(INSTANCE) ]; then \
+		echo "Erreur : le fichier $(INSTANCE) n'existe pas."; \
+		echo "Veuillez placer un fichier .tsp dans data/tsp/"; \
+		exit 1; \
+	fi
+	$(PYTHON) src/main.py $(INSTANCE) $(P) $(ALPHA)
+	@echo ""
+	@echo "Résultats sauvegardés dans results/resultats.txt"
+
+# Règle test : lance un test rapide sur une petite instance
+# Utile pour vérifier que tout fonctionne correctement
+.PHONY: test
+test:
+	@echo "Test rapide..."
+	@echo "Vérification de l'installation..."
+	$(PYTHON) -c "import numpy, matplotlib, pulp; print('Dépendances OK')"
+	@echo "Test terminé."
+
+# Règle clean : nettoie les fichiers générés
+# Supprime les résultats et les figures générées
+# Ne supprime pas les données d'entrée ni le code source
+.PHONY: clean
+clean:
+	@echo "Nettoyage des fichiers générés..."
+	@if [ -f results/resultats.txt ]; then \
+		rm results/resultats.txt; \
+		echo "  - results/resultats.txt supprimé"; \
+	fi
+	@if [ -d results/figures ]; then \
+		rm -f results/figures/*.png results/figures/*.jpg; \
+		echo "  - Figures supprimées"; \
+	fi
+	@echo "Nettoyage terminé."
+
+# Règle clean-all : nettoie tout (y compris les fichiers Python compilés)
+.PHONY: clean-all
+clean-all: clean
+	@echo "Nettoyage complet..."
+	@find . -type d -name "__pycache__" -exec rm -r {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	@echo "Nettoyage complet terminé."
